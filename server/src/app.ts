@@ -4,6 +4,7 @@ import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import morgan from "morgan";
 import { env } from "./config/env.js";
+import { getDbStatus } from "./config/db.js";
 import { authRoutes } from "./routes/authRoutes.js";
 import { leadRoutes } from "./routes/leadRoutes.js";
 import { errorHandler, notFound } from "./middleware/errorHandler.js";
@@ -28,7 +29,7 @@ app.use(morgan("dev"));
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, limit: 300 }));
 
 app.get("/health", (_req, res) => {
-  res.json({ success: true, data: { status: "ok" } });
+  res.json({ success: true, data: { status: "ok", database: getDbStatus() } });
 });
 
 app.use("/api/auth", authRoutes);

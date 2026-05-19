@@ -6,3 +6,8 @@ export const connectDb = async (): Promise<void> => {
   await mongoose.connect(env.mongoUri);
   console.log("MongoDB connected");
 };
+
+export const getDbStatus = (): string => {
+  const states = ["disconnected", "connected", "connecting", "disconnecting"];
+  return states[mongoose.connection.readyState] ?? "unknown";
+};
