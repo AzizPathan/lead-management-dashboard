@@ -124,6 +124,20 @@ Set this Vercel environment variable:
 VITE_API_URL=https://your-railway-api.up.railway.app/api
 ```
 
+If your Vercel project root is set to `client`, use these settings:
+
+```bash
+Build Command: npm run build
+Output Directory: dist
+```
+
+If your Vercel project root is the repository root, use these settings:
+
+```bash
+Build Command: cd client && npm install && npm run build
+Output Directory: client/dist
+```
+
 After changing Vercel or Railway environment variables, redeploy the affected service.
 
 ## Submission Notes
@@ -131,3 +145,21 @@ After changing Vercel or Railway environment variables, redeploy the affected se
 Add your GitHub repository URL, deployment link, and updated resume before sending the assignment email:
 
 Subject: `MERN Internship Assignment Submission - Your Name`
+
+## Deployment
+
+See detailed deployment guides:
+- [Vercel Frontend Deployment](VERCEL_DEPLOYMENT.md) - Complete guide for deploying to Vercel
+- [Deployment Checklist](DEPLOYMENT_CHECKLIST.md) - Quick reference for both frontend and backend
+
+### Quick Deploy to Vercel
+
+1. Push your code to GitHub
+2. Go to https://vercel.com and import your repository
+3. Configure:
+   - Build Command: `cd client && npm install && npm run build`
+   - Output Directory: `client/dist`
+   - Environment Variable: `VITE_API_URL` = `https://your-backend-api.com/api`
+4. Deploy!
+
+**Note**: You'll need to deploy your backend separately (Railway, Render, or Heroku recommended).

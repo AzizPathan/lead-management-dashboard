@@ -1,0 +1,8 @@
+node_modules
+server
+docs
+*.log
+.env
+.env.local
+dashboard-login-check.png
+docker-compose.yml
