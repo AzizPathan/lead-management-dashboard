@@ -38,7 +38,8 @@ cp .env.example .env
 cp .env.example server/.env
 ```
 
-For local non-Docker development, set `MONGO_URI=mongodb://localhost:27017/smart-leads`.
+For local non-Docker development, use `MONGO_URI=mongodb://localhost:27017/smart-leads`.
+Docker Compose overrides this automatically to `mongodb://mongo:27017/smart-leads` inside the server container.
 
 3. Start MongoDB, then seed demo data:
 
@@ -105,8 +106,9 @@ MONGO_URI=mongodb+srv://USER:PASSWORD@HOST/smart-leads
 JWT_SECRET=replace-with-a-long-random-production-secret
 JWT_EXPIRES_IN=7d
 CLIENT_URL=https://your-vercel-app.vercel.app
-PORT=5000
 ```
+
+Do not use `mongodb://mongo:27017/smart-leads` on Railway. That hostname only exists inside local Docker Compose. If Railway gives you `MONGO_URL` or `DATABASE_URL` from a MongoDB plugin, the server can use those too.
 
 After deployment, your API base URL will look like:
 
