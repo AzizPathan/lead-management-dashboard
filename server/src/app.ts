@@ -28,6 +28,21 @@ app.use(express.json({ limit: "1mb" }));
 app.use(morgan("dev"));
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, limit: 300 }));
 
+app.get("/", (_req, res) => {
+  res.json({
+    success: true,
+    data: {
+      name: "Smart Leads API",
+      status: "running",
+      endpoints: {
+        health: "/health",
+        auth: "/api/auth",
+        leads: "/api/leads"
+      }
+    }
+  });
+});
+
 app.get("/health", (_req, res) => {
   res.json({ success: true, data: { status: "ok", database: getDbStatus() } });
 });
