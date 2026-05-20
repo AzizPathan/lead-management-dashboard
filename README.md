@@ -25,6 +25,8 @@ A full-stack MERN lead management dashboard built with TypeScript, JWT authentic
 
 ## Local Setup
 
+For full setup and deployment instructions, see [SETUP.md](SETUP.md).
+
 1. Install dependencies:
 
 ```bash
