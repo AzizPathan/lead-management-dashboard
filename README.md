@@ -105,7 +105,7 @@ Set these Railway environment variables:
 MONGO_URI=mongodb+srv://USER:PASSWORD@HOST/smart-leads
 JWT_SECRET=replace-with-a-long-random-production-secret
 JWT_EXPIRES_IN=7d
-CLIENT_URL=https://your-vercel-app.vercel.app
+CLIENT_URL=https://lead-management-dashboard-client.vercel.app
 ```
 
 Do not use `mongodb://mongo:27017/smart-leads` on Railway. That hostname only exists inside local Docker Compose. If Railway gives you `MONGO_URL` or `DATABASE_URL` from a MongoDB plugin, the server can use those too.
@@ -123,7 +123,7 @@ Create a Vercel project from this repository. Vercel will use `vercel.json` to b
 Set this Vercel environment variable:
 
 ```bash
-VITE_API_URL=https://your-railway-api.up.railway.app/api
+VITE_API_URL=https://server-production-e97f.up.railway.app/api
 ```
 
 If your Vercel project root is set to `client`, use these settings:

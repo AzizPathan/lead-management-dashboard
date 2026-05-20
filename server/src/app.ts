@@ -11,11 +11,22 @@ import { errorHandler, notFound } from "./middleware/errorHandler.js";
 
 export const app = express();
 
+const isAllowedOrigin = (origin: string): boolean => {
+  if (env.clientUrls.includes(origin)) return true;
+
+  try {
+    const { hostname, protocol } = new URL(origin);
+    return protocol === "https:" && hostname.endsWith(".vercel.app");
+  } catch {
+    return false;
+  }
+};
+
 app.use(helmet());
 app.use(
   cors({
     origin(origin, callback) {
-      if (!origin || env.clientUrls.includes(origin)) {
+      if (!origin || isAllowedOrigin(origin)) {
         callback(null, true);
         return;
       }
@@ -37,7 +48,9 @@ app.get("/", (_req, res) => {
       endpoints: {
         health: "/health",
         auth: "/api/auth",
-        leads: "/api/leads"
+        leads: "/api/leads",
+        authAlias: "/auth",
+        leadsAlias: "/leads"
       }
     }
   });
@@ -49,5 +62,7 @@ app.get("/health", (_req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/leads", leadRoutes);
+app.use("/auth", authRoutes);
+app.use("/leads", leadRoutes);
 app.use(notFound);
 app.use(errorHandler);
