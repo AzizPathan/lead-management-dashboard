@@ -7,7 +7,7 @@ import { env } from "./config/env.js";
 import { getDbStatus } from "./config/db.js";
 import { authRoutes } from "./routes/authRoutes.js";
 import { leadRoutes } from "./routes/leadRoutes.js";
-import { errorHandler, notFound } from "./middleware/errorHandler.js";
+import { errorHandler, notFound, requireDatabase } from "./middleware/errorHandler.js";
 
 export const app = express();
 
@@ -30,7 +30,7 @@ app.use(
         callback(null, true);
         return;
       }
-      callback(new Error(`CORS blocked origin: ${origin}`));
+      callback(null, false);
     },
     credentials: true
   })
@@ -60,9 +60,9 @@ app.get("/health", (_req, res) => {
   res.json({ success: true, data: { status: "ok", database: getDbStatus() } });
 });
 
-app.use("/api/auth", authRoutes);
-app.use("/api/leads", leadRoutes);
-app.use("/auth", authRoutes);
-app.use("/leads", leadRoutes);
+app.use("/api/auth", requireDatabase, authRoutes);
+app.use("/api/leads", requireDatabase, leadRoutes);
+app.use("/auth", requireDatabase, authRoutes);
+app.use("/leads", requireDatabase, leadRoutes);
 app.use(notFound);
 app.use(errorHandler);
