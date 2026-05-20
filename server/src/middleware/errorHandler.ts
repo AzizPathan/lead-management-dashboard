@@ -3,6 +3,10 @@ import { validationResult } from "express-validator";
 import { isDbConnected } from "../config/db.js";
 import { ApiError } from "../utils/ApiError.js";
 
+interface MongoErrorLike extends Error {
+  code?: number;
+}
+
 export const validateRequest = (req: Request, _res: Response, next: NextFunction): void => {
   const result = validationResult(req);
   if (!result.isEmpty()) {
@@ -25,13 +29,21 @@ export const requireDatabase: RequestHandler = (_req, _res, next) => {
 };
 
 export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
+  const error = err as MongoErrorLike;
+  const isDuplicateKeyError = error.code === 11000;
   const isMongoConnectionError =
     err instanceof Error &&
     (err.name === "MongooseServerSelectionError" || err.message.includes("Operation") || err.message.includes("buffering timed out"));
-  const statusCode = err instanceof ApiError ? err.statusCode : isMongoConnectionError ? 503 : 500;
+  const statusCode = err instanceof ApiError ? err.statusCode : isDuplicateKeyError ? 409 : isMongoConnectionError ? 503 : 500;
   res.status(statusCode).json({
     success: false,
-    message: isMongoConnectionError ? "Database is not connected. Check MONGO_URI on the backend deployment." : err instanceof Error ? err.message : "Unexpected server error",
+    message: isDuplicateKeyError
+      ? "Email is already registered"
+      : isMongoConnectionError
+        ? "Database is not connected. Check MONGO_URI on the backend deployment."
+        : err instanceof Error
+          ? err.message
+          : "Unexpected server error",
     details: err instanceof ApiError ? err.details : undefined
   });
 };
